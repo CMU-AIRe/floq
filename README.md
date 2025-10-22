@@ -53,7 +53,7 @@ Here are some general tips for floq's hyperparameter tuning for new tasks:
 ## Reproducing the main results
 
 We provide the complete list of the **exact command-line flags**
-used to produce the main results of floq in the paper. We also provide the [wandbs](https://docs.google.com/spreadsheets/d/1sQnq8-IIiyzMnASMCvlbMDeVP0XPLhYjmZuWgue4u9k/edit?usp=sharing). We ran three seeds (--seed=0, --seed=1, --seed=2) for each task.  
+used to produce the main results of floq in the paper. We also provide the [wandbs](https://docs.google.com/spreadsheets/d/1qmLCJ11d9pzJA7OrACT10Y6HEr0RWv4eVoB0iOFMNqI/edit?usp=sharing). We ran three seeds (--seed=0, --seed=1, --seed=2) for each task.  
 
 > [!NOTE]
 > In OGBench, each environment provides five tasks, one of which is the default task.
