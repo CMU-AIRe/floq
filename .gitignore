@@ -1,0 +1,13 @@
+# Exclude SLURM logs
+slurm-*.out
+
+# Exclude job submission scripts
+submit_final.sh
+agents/__pycache__
+
+# Optional: other local artifacts
+*.log
+*.tmp
+*.DS_Store
+__pycache__/
+
