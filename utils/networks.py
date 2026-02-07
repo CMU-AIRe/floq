@@ -524,15 +524,14 @@ class CriticVectorField(nn.Module):
             returns = (returns - self.q_min)/(self.q_max - self.q_min)
 
         if self.embed_time:
-            times_embed = jnp.tile(times, [1, self.time_embed_dim]) #(batch_size, time_embedding_dim)
-            times_embed = (jnp.expand_dims(jnp.arange(1, self.time_embed_dim + 1, 1).astype(jnp.float32), axis = 0)* jnp.pi * times_embed)
-            times_embed = jnp.cos(times_embed) #(batch_size, time embedding_dim)
+            times_embed = jnp.cos(times) #(batch_size, time embedding_dim)
             times_embed = jnp.expand_dims(times_embed, axis = 0) #(1, batch_size, time_embedding_dim)
             times_embed = jnp.tile(times_embed, [self.num_ensembles, 1, 1]) #(num_ensembles, batch_size, time_embedding_dim)
-            
+
         else:
             times_embed = jnp.expand_dims(times, axis = 0) #(1, batch_size, time_embedding_dim)
             times_embed = jnp.tile(times_embed, [self.num_ensembles, 1, 1]) #(num_ensembles, batch_size, time_embedding_dim)
+
 
         inputs = jnp.concatenate([observations, returns, times_embed], axis=-1)
         v = self.mlp(inputs) #(num_ensembles, batch_size, 1) 
@@ -610,15 +609,14 @@ class CriticResVectorField(nn.Module):
             returns = (returns - self.q_min)/(self.q_max - self.q_min) #(num_ensembles, batch_size, 1)
 
         if self.embed_time:
-            times_embed = jnp.tile(times, [1, self.time_embed_dim]) #(batch_size, time_embedding_dim)
-            times_embed = (jnp.expand_dims(jnp.arange(1, self.time_embed_dim + 1, 1).astype(jnp.float32), axis = 0)* jnp.pi * times_embed)
-            times_embed = jnp.cos(times_embed) #(batch_size, time embedding_dim)
-            times_embed = jnp.expand_dims(times_embed, axis = 0) #(1, batch_size, time_embedding_dim)
-            times_embed = jnp.tile(times_embed, [self.num_ensembles, 1, 1]) #(num_ensembles, batch_size, time_embedding_dim)
-            
+            times_embed = jnp.cos(times) #(batch_size, 1)
+            times_embed = jnp.expand_dims(times_embed, axis = 0) #(1, batch_size, 1)
+            times_embed = jnp.tile(times_embed, [self.num_ensembles, 1, 1]) #(num_ensembles, batch_size, 1)
+
         else:
             times_embed = jnp.expand_dims(times, axis = 0) #(1, batch_size, time_embedding_dim)
             times_embed = jnp.tile(times_embed, [self.num_ensembles, 1, 1]) #(num_ensembles, batch_size, time_embedding_dim)
+
 
         inputs = jnp.concatenate([observations, returns, times_embed], axis=-1)
         v = self.mlp(inputs) #(num_ensembles, batch_size,)
