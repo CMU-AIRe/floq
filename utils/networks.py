@@ -525,11 +525,11 @@ class CriticVectorField(nn.Module):
 
         if self.embed_time:
             times_embed = jnp.tile(times, [1, self.time_embed_dim]) #(batch_size, time_embedding_dim)
-            times_embed = (jnp.arange(1, self.time_embed_dim + 1, 1).astype(jnp.float32)* jnp.pi * times)
-            times_embed = jnp.cos(times) #(batch_size, time embedding_dim)
+            times_embed = (jnp.expand_dims(jnp.arange(1, self.time_embed_dim + 1, 1).astype(jnp.float32), axis = 0)* jnp.pi * times_embed)
+            times_embed = jnp.cos(times_embed) #(batch_size, time embedding_dim)
             times_embed = jnp.expand_dims(times_embed, axis = 0) #(1, batch_size, time_embedding_dim)
             times_embed = jnp.tile(times_embed, [self.num_ensembles, 1, 1]) #(num_ensembles, batch_size, time_embedding_dim)
-
+            
         else:
             times_embed = jnp.expand_dims(times, axis = 0) #(1, batch_size, time_embedding_dim)
             times_embed = jnp.tile(times_embed, [self.num_ensembles, 1, 1]) #(num_ensembles, batch_size, time_embedding_dim)
@@ -609,12 +609,13 @@ class CriticResVectorField(nn.Module):
         else:
             returns = (returns - self.q_min)/(self.q_max - self.q_min) #(num_ensembles, batch_size, 1)
 
-        if self.embed_time and times is not None:
+        if self.embed_time:
             times_embed = jnp.tile(times, [1, self.time_embed_dim]) #(batch_size, time_embedding_dim)
-            times_embed = (jnp.arange(1, self.time_embed_dim + 1, 1).astype(jnp.float32)* jnp.pi * times)
-            times_embed = jnp.cos(times) #(batch_size, time embedding_dim)
+            times_embed = (jnp.expand_dims(jnp.arange(1, self.time_embed_dim + 1, 1).astype(jnp.float32), axis = 0)* jnp.pi * times_embed)
+            times_embed = jnp.cos(times_embed) #(batch_size, time embedding_dim)
             times_embed = jnp.expand_dims(times_embed, axis = 0) #(1, batch_size, time_embedding_dim)
             times_embed = jnp.tile(times_embed, [self.num_ensembles, 1, 1]) #(num_ensembles, batch_size, time_embedding_dim)
+            
         else:
             times_embed = jnp.expand_dims(times, axis = 0) #(1, batch_size, time_embedding_dim)
             times_embed = jnp.tile(times_embed, [self.num_ensembles, 1, 1]) #(num_ensembles, batch_size, time_embedding_dim)
